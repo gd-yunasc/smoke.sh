@@ -173,7 +173,7 @@ _smoke_success() {
 
 ## Curl helpers
 _curl() {
-  local opt=(--header 'Content-Type: application/json' --header 'Accept: application/json' --cookie $SMOKE_CURL_COOKIE_JAR --cookie-jar $SMOKE_CURL_COOKIE_JAR --location --dump-header $SMOKE_CURL_HEADERS --silent)
+  local opt=(--header 'Accept: application/json' --cookie $SMOKE_CURL_COOKIE_JAR --cookie-jar $SMOKE_CURL_COOKIE_JAR --location --dump-header $SMOKE_CURL_HEADERS --silent)
   if [[ -n "$SMOKE_HEADER_HOST" ]]
   then
     opt+=(-H "Host: $SMOKE_HEADER_HOST")
