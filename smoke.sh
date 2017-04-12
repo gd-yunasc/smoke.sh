@@ -180,6 +180,7 @@ _curl() {
   then
     opt+=(-H "Host: $SMOKE_HEADER_HOST")
   fi
+  echo curl "${opt[@]}" "$@"
   curl "${opt[@]}" "$@" > $SMOKE_CURL_BODY
 }
 
