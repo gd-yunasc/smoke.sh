@@ -33,7 +33,7 @@ smoke_form() {
         exit 1
     fi
 
-    _curl_post $URL $FORMDATA
+    _curl_post $URL $FORMDATA $HEADERS
 }
 
 smoke_form_ok() {
