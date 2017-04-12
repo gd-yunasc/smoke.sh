@@ -25,6 +25,7 @@ smoke_csrf() {
 smoke_form() {
     URL="$1"
     FORMDATA="$2"
+    HEADERS="$3"
 
     if [[ ! -f "$FORMDATA" ]]; then
         _smoke_print_failure "No formdata file"
@@ -38,8 +39,9 @@ smoke_form() {
 smoke_form_ok() {
     URL="$1"
     FORMDATA="$2"
+    HEADERS="$3"
 
-    smoke_form "$URL" "$FORMDATA"
+    smoke_form "$URL" "$FORMDATA" "$HEADERS"
     smoke_assert_code_ok
 }
 
@@ -173,7 +175,7 @@ _smoke_success() {
 
 ## Curl helpers
 _curl() {
-  local opt=(--header 'Accept: application/json' --cookie $SMOKE_CURL_COOKIE_JAR --cookie-jar $SMOKE_CURL_COOKIE_JAR --location --dump-header $SMOKE_CURL_HEADERS --silent)
+  local opt=(--cookie $SMOKE_CURL_COOKIE_JAR --cookie-jar $SMOKE_CURL_COOKIE_JAR --location --dump-header $SMOKE_CURL_HEADERS --silent)
   if [[ -n "$SMOKE_HEADER_HOST" ]]
   then
     opt+=(-H "Host: $SMOKE_HEADER_HOST")
@@ -198,11 +200,12 @@ _curl_post() {
     URL="$1"
     FORMDATA="$2"
     FORMDATA_FILE="@"$(_smoke_prepare_formdata $FORMDATA)
+    HEADERS="$3"
 
     SMOKE_URL="$SMOKE_URL_PREFIX$URL"
     _smoke_print_url "$SMOKE_URL"
 
-    _curl --data "$FORMDATA_FILE" $SMOKE_URL
+    _curl --data "$FORMDATA_FILE" "$HEADERS" $SMOKE_URL
 
     grep -oE 'HTTP[^ ]+ [0-9]{3}' $SMOKE_CURL_HEADERS | tail -n1 | grep -oE '[0-9]{3}' > $SMOKE_CURL_CODE
 
